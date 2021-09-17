@@ -1,9 +1,9 @@
 datatypes xsd = "http://www.w3.org/2001/XMLSchema-datatypes" 
 default namespace = "http://www.w3.org/1999/xhtml"
 start = mapml 
-mapml = element mapml { head?, attribute lang {text}?, body }
-head = element head { headContent }
-link = element link { 
+mapml = element mapml- { head?, attribute lang {text}?, body }
+head = element map-head { headContent }
+link = element map-link { 
         attribute href { xsd:anyURI }?,
         # can have a tref (when in extent) or an href (but not both)
         attribute tref { text }?,
@@ -16,26 +16,26 @@ link = element link {
     }
 links = link*
 headContent =  
-    element base { 
+    element map-base { 
         attribute href {text}
     }? &
-    element meta {
+    element map-meta {
         attribute name {text}?,
         attribute charset {text}?,
         attribute content {text}?,
         attribute http-equiv {text}?
     }* &
-    element style { text }? &
-    element title { text }? &
+    element map-style { text }? &
+    element map-title { text }? &
     links
 
-body = element body { bodyContent }
+body = element map-body { bodyContent }
 bodyContent =  extent? & links & (feature | tile | image)*  
-extent = element extent {
+extent = element map-extent {
   attribute units  { "OSMTILE" | "CBMTILE" | "APSTILE" | "WGS84" }?,
   (inputs* & datalist* & links* & select* & label*)?
 }
-inputs = (element input {
+inputs = (element map-input {
   attribute name { text },
   # xmin, ymin, xmax, ymax and projection are deprecated. If you need to transmit a projection, use a hidden input/variable
   # for xmin etc, use a input@type=location with appropriate position, units, axis values.
@@ -54,44 +54,44 @@ inputs = (element input {
   attribute max { xsd:double }?,
   attribute step { text }?
 })
-datalist = element datalist {
+datalist = element map-datalist {
   attribute id { text }?,
   option+
 }
-label = element label {
+label = element map-label {
   attribute for { text },
   text
 }
-select = element select {
+select = element map-select {
   attribute id { text },
   attribute name { text },
   option+
 }
-option = element option {
+option = element map-option {
   attribute value { text }?,
   attribute label { text }?,
   text
 }
-feature = element feature {
+feature = element map-feature {
     attribute id { text }?,
     attribute class { text }?,
     attribute zoom { text }?,
     (geometry? & properties? & featurecaption?)
 }
-tile = element tile {
+tile = element map-tile {
     attribute col { xsd:integer },
     attribute row { xsd:integer },
     ImageResourceMetadataAttributes
 }
-bbox = element bbox { twoPositions }
-image =    element image { ImageModel }
+bbox = element map-bbox { twoPositions }
+image =    element map-image { ImageModel }
 
-geometry = element geometry {
+geometry = element map-geometry {
   attribute cs { "gcrs" | "pcrs" | "tcrs" | "map" | "tilematrix" | "tile" }?,
   (GeometryContent | map-a)
   }
-properties = element properties { PropertyContent }
-featurecaption = element featurecaption { text? }
+properties = element map-properties { PropertyContent }
+featurecaption = element map-featurecaption { text? }
 
 ImageResourceMetadataAttributes =  
     attribute src { text },
@@ -102,34 +102,34 @@ ImageResourceMetadataAttributes =
 ImageModel =  ImageResourceMetadataAttributes
 # allow any property/value via simple elements with allowed text content
 # see https://www.oreilly.com/library/view/xml-pocket-reference/9780596100506/re92.html
-PropertyContent = any_element 
+PropertyContent = any_element
 any_element = element *  { (attribute * { text } | text | any_element)* }
 any_attribute = attribute * { text }
 imageLocation = attribute x { xsd:double }, attribute y { xsd:double }
 imageSize = attribute width { xsd:integer },attribute height { xsd:integer }
 
 GeometryContent =  point | linestring | polygon | multipoint | multilinestring | multipolygon | geometrycollection
-map-a = element map-a { 
+map-a = element map-map-a { 
   attribute href { text },
   attribute target { "_self" | "_top" | "_blank" | "_parent" }?,
   attribute type { "text/mapml" | "text/html" }?,
-  (GeometryContent | text | span_element | coordinates_mixed)}
-point = element point { map-a | coordinates_mixed }
-linestring = element linestring { map-a | coordinates_mixed }
-polygon = element polygon { map-a* & coordinates_mixed+ }
-multipoint = element multipoint { map-a | coordinates_mixed }
-multilinestring = element multilinestring { map-a* & coordinates_mixed+ }
-multipolygon = element multipolygon { map-a* & polygon+ }
-geometrycollection = element geometrycollection {
+  (GeometryContent | text | span_element| coordinates_mixed)}
+point = element map-point { map-a | coordinates_mixed }
+linestring = element map-linestring { map-a | coordinates_mixed }
+polygon = element map-polygon { map-a* & coordinates_mixed+ }
+multipoint = element map-multipoint { map-a | coordinates_mixed }
+multilinestring = element map-multilinestring { map-a* & coordinates_mixed+ }
+multipolygon = element map-multipolygon { map-a* & polygon+ }
+geometrycollection = element map-geometrycollection {
     (point* & linestring* & polygon* & multipoint* & multilinestring* & multipolygon*)
 }
-span_element = element span { 
+span_element= element map-span { 
                   mixed {
                     attribute * { text }*&
                     span_element* &
                     map-a*
                   }
                }
-coordinates_mixed = element coordinates  { mixed { span_element* & map-a* } } 
+coordinates_mixed = element map-coordinates  { mixed { span_element* & map-a* } } 
 # for bbox content, omits coordinates element
 twoPositions =  list  { (xsd:double, xsd:double, xsd:double, xsd:double) } 
