@@ -330,6 +330,7 @@
               <li><time>2024-08-21</time>: Rename Web-Map-Custom-Element repo to MapML.js polyfill
               <li><time>2024-10-18</time>: Rename &lt;layer-&gt; custom element to &lt;map-layer&gt;
               <li><time>2025-07-19</time>: Replace normative use of <code>mapml-viewer</code> and <code>map-caption</code> with <code>mapviewer</code> and <code>mapcaption</code>respectively <a href="https://github.com/Maps4HTML/MapML-Specification/issues/262">issue</a>
+              <li><time>2026-10-28</time>: Add <code>static</code> token to controlslist values.  Re-add <code>@rel=search</code> and <code>@rel=suggestions.</code></li>
             </ol>
           </details>
         </section>
@@ -415,7 +416,7 @@
         <dd id="attr-mapviewer-controlslist"><code>controlslist</code> — Show/hide specific user agent controls.</dd>
         <dd id="attr-mapviewer-width"><code>width</code> — Horizontal dimension in pixels.</dd>
         <dd id="attr-mapviewer-height"><code>height</code> — Vertical dimension in pixels.</dd>
-        <dd id="attr-mapviewer-static"><code>static</code> — Disable map interactivity.</dd>
+        <dd id="attr-mapviewer-static"><code>static</code> — Disable user-initiated map pan and zoom.</dd>
         <dt><a href="https://html.spec.whatwg.org/multipage/dom.html#concept-element-tag-omission">Tag omission in text/html</a>:</dt>
         <dd>Neither tag is omissible.</dd>
         <dt><a href="https://html.spec.whatwg.org/multipage/dom.html#concept-element-accessibility-considerations">Accessibility considerations</a>:</dt>
@@ -554,8 +555,10 @@
           <a href="#attr-mapviewer-controlslist-nolayer"><code>nolayer</code></a>,
           <a href="#attr-mapviewer-controlslist-noreload"><code>noreload</code></a>,
           <a href="#attr-mapviewer-controlslist-nozoom"><code>nozoom</code></a>,
-          <a href="#attr-mapviewer-controlslist-noscale"><code>noscale</code></a>, and 
-          <a href="#attr-mapviewer-controlslist-geolocation"><code>geolocation</code></a>.
+          <a href="#attr-mapviewer-controlslist-noscale"><code>noscale</code></a>, 
+          <a href="#attr-mapviewer-controlslist-geolocation"><code>geolocation</code></a>,
+          <a href="#attr-mapviewer-controlslist-search"><code>search</code></a>, and
+          <a href="#attr-mapviewer-controlslist-static"><code>static</code></a>.
         </p>
           
         <p>The <dfn id="attr-mapviewer-controlslist-nofullscreen"><code>nofullscreen</code></dfn> keyword hints that the fullscreen mode control should be hidden when using the user agent's own set of controls for the media element.</p>
@@ -563,14 +566,11 @@
         <p>The <dfn id="attr-mapviewer-controlslist-noreload"><code>noreload</code></dfn> keyword hints that the reload control should be hidden when using the user agent's own set of controls for the media element.</p>
         <p>The <dfn id="attr-mapviewer-controlslist-nozoom"><code>nozoom</code></dfn> keyword hints that the zoom controls should be hidden when using the user agent's own set of controls for the media element.</p>
         <p>The <dfn id="attr-mapviewer-controlslist-noscale"><code>noscale</code></dfn> keyword hints that the scalebar control should be hidden when using the user agent's own set of controls for the media element.</p>
-        <p>The <dfn id="attr-mapviewer-controlslist-geolocation"><code>geolocation</code></dfn> 
-        keyword hints that a control to allow the user to enable client-side representation 
-        of the user agent's location should be presented.  Triggering the control 
-        should invoke an interaction to obtain a time-limited 
-        <a href="https://www.w3.org/TR/permissions/#dfn-express-permission">express 
-        permission</a> [[permissions]] to display the user agent's location on the viewer.</p>
-        
-        <p class="note"><em>Hiding these aspects of the user agent's own controls does not necessarily disable the related functionality. For example, the user agent might present the same functionality through a context menu or keyboard shortcut.</em></p>
+        <p>The <dfn id="attr-mapviewer-controlslist-geolocation"><code>geolocation</code></dfn> keyword hints that a control to allow the user to enable client-side representation of the user agent's location should be presented.  Triggering the control should invoke an interaction to obtain a time-limited <a href="https://www.w3.org/TR/permissions/#dfn-express-permission">express permission</a> [[permissions]] to display the user agent's location on the viewer.</p>
+        <p>The <dfn id="attr-mapviewer-controlslist-search"><code>search</code></dfn> keyword hints that a control to render a text-based search interface should be presented, in the disabled state by default. The search interface access button should be enabled if and when any <a href="#the-layer-element">checked</a> layer on the map contains a text-searchable URL template of the form <a href="#the-link-element"><code>&lt;link rel="search" tref="...{searchTerms}..." &gt;</code></a>.  If no <a href="#the-layer-element">checked</a> and searchable layers are present as children of the <a href="#the-mapviewer-element"><code>mapviewer</code></a> element, the <code>search</code> control icon should be rendered in a visually and functionally disabled state.</p>
+        <p>The <dfn id="attr-mapviewer-controlslist-static"><code>static</code></dfn> keyword hints that a control should be rendered to enable and disable some interactive map characteristics, via corresponding manipulation of the <a href="#attr-mapviewer-static"><code>static</code></a> attribute.</p>
+
+          <p class="note"><em>Hiding these aspects of the user agent's own controls does not necessarily disable the related functionality. For example, the user agent might present the same functionality through a context menu or keyboard shortcut.</em></p>
         
         
         
@@ -599,6 +599,8 @@
         
         <p>The <a href="#the-mapviewer-element"><code>mapviewer</code></a> element supports the <a href="#attr-mapviewer-width"><code>width</code></a> and <a href="#attr-mapviewer-height"><code>height</code></a> <a href="https://html.spec.whatwg.org/multipage/embedded-content-other.html#dimension-attributes">dimension attributes</a>. [[HTML]]</p>
         <p>The <a href="https://drafts.csswg.org/css-images/#default-object-size">default object size</a> is a width of 300 <a href="https://drafts.csswg.org/css-values/#px">CSS pixels</a> and a height of 150 <a href="https://drafts.csswg.org/css-values/#px">CSS pixels</a>. [[css-images-3]]</p>
+
+        <p>The <a href="#attr-mapviewer-static"><code>static</code></a> boolean attribute when present and the <code>static</code> IDL attribute disable user-initiated  pan and zoom and the zoom control when present. Feature interaction and other controls remain interactive.</p>
         
         <p>
           The <a href="#dom-htmlmapmlviewerelement-back"><code>back</code></a>, 
@@ -1905,8 +1907,9 @@ start =
           <dt><a href="https://html.spec.whatwg.org/multipage/dom.html#concept-element-categories">Categories</a>:</dt>
           <dd><a href="https://html.spec.whatwg.org/multipage/dom.html#metadata-content-2">Metadata content</a>.</dd>
           <dt><a href="https://html.spec.whatwg.org/multipage/dom.html#concept-element-contexts">Contexts in which this element can be used</a>:</dt>
-          <dd>If the element represents a hyperlink (has a <code>href</code> attribute): In <a href="#dfn-local-content">local content</a>, as a child of the <a href="#the-layer-element"><code>layer</code></a> element; in <a href="#dfn-remote-content">remote content</a>, as a child of the <a href="#the-head-element"><code>head</code></a> or <a href="#the-body-element"><code>body</code></a> element.</dd>
-          <dd>If the element represents a link template (has a <code>tref</code> attribute): As a child of the <a href="#the-extent-element"><code>extent</code></a> element.</dd>
+          <dd>If the element has a <code>href</code> attribute, or if the element has a 
+            <code>rel</code> attribute value of <code>search</code> or <code>suggestions</code> (is a search link) : In <a href="#dfn-local-content">local content</a>, as a child of the <a href="#the-layer-element"><code>layer</code></a> element; in <a href="#dfn-remote-content">remote content</a>, as a child of the <a href="#the-head-element"><code>head</code></a> or <a href="#the-body-element"><code>body</code></a> element.</dd>
+          <dd>If the element represents a link template (has a <code>tref</code> attribute and is not a search link): As a child of the <a href="#the-extent-element"><code>extent</code></a> element.</dd>
           <dt><a href="https://html.spec.whatwg.org/multipage/dom.html#concept-element-content-model">Content model</a>:</dt>
           <dd><a href="https://html.spec.whatwg.org/multipage/dom.html#concept-content-nothing">Nothing</a>.</dd>
           <dt><a href="https://html.spec.whatwg.org/multipage/dom.html#concept-element-attributes">Content attributes</a>:</dt>
@@ -2002,12 +2005,13 @@ start =
         </p>
 
         <p>
-          The <code>link[@tref]</code> element represents a URL template for a resource (e.g. tiles) which can be used by the client make requests for resources to fill its extent at zoom levels and bounds indicated by sibling
-          <code>input[/@type=location]</code> elements' <code>min</code> and <code>max</code> attributes, or to (partially) identify URL targets suitable to enable query of server resources. The <code>rel</code> attribute contains a keyword
+          When marked up as a child of the <a href="#the-extent-element"><code>extent</code></a> element, the <code>link[@tref]</code> element represents a URL template for a resource (e.g. tiles) which can be used by the client make requests for resources to fill its extent at zoom levels and bounds indicated by sibling <code>input[/@type=location]</code> elements' <code>min</code> and <code>max</code> attributes, or to (partially) identify URL targets suitable to enable query of server resources. The <code>rel</code> attribute contains a keyword
           string which identifies the role of the resource(s) for which the <code>tref</code> attribute value represents a URL template, which may contain zero or more <code>input/@name</code> variable references. Such variable references
           must be a case-insensitive match of sibling <a href="#the-input-element"><code>input</code></a> elements' <code>name</code> attribute.
         </p>
-        <p>The content represented by <code>link[@tref]</code> elements should be painted in document order of the appearance of the <code>link[@tref]</code> elements.</p>
+        <p>The content represented by <code>link[@tref]</code> elements that are marked up as children of the <a href="#the-extent-element"><code>extent</code></a> element should be painted in document order of the appearance of the <code>link[@tref]</code> elements.</p>
+
+        <p><code>link[@tref]</code> elements for which the <code>@rel</code> value is <code>search</code> or <code>suggestions</code> are supported in <a href="#dfn-local-content">local content</a>, as children of the <a href="#the-layer-element"><code>layer</code></a> element, or in <a href="#remote-content">remote content</a> as children of the <a href="#the-head-element"><code>head</code></a> or <a href="#the-body-element"><code>body</code></a> element.  In such cases, variable-defining <code>input</code> elements are not applicable, because the <code>{searchTerms}</code> variable (reference) is <a href="#link-rel-search">defined</a> by this specification.</p>
 
         <div class="table-responsive">
         <table id="rel-values" class="def">
@@ -2077,6 +2081,14 @@ start =
             <tr id="link-rel-query">
               <td><code>query</code></td>
               <td>The templated resource reference identifies a query resource at a location</td>
+            </tr>
+            <tr id="link-rel-search">
+              <td><code>search</code></td>
+              <td>The templated resource reference identifies a location-name-searchable resource API. The <code>{searchTerms}</code> template variable is defined as the substitution target for location name terms to search the API with.</td>
+            </tr>
+            <tr id="link-rel-suggestions">
+              <td><code>suggestions</code></td>
+              <td>The templated resource reference identifies a location-name-searchable resource API that returns "hints", or suggestions, as strings that MAY exist within the text corpus that is searchable via the  API. The <code>{searchTerms}</code> template variable is defined to be the substitution target for location name terms to search the API for suggestion strings. Suggestion strings may be substituted for the <code>search</code></a> link's <code>{searchTerms}</code>.  Searching the linked API in this way MAY obtain a more precise matching and geolocated search result.</td>
             </tr>
           </tbody>
         </table>
