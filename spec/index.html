@@ -565,6 +565,8 @@
           zoom in,
           zoom out,
           toggle the "on/off" status of layers,
+          search for geographic places by name,
+          identify the user's location (subject to user permission),
           and show the media content in manners more suitable to the user
           (e.g. fullscreen map or in an independent resizable window).
           Other controls may also be made available.
@@ -2170,11 +2172,11 @@ start =
             </tr>
             <tr id="link-rel-search">
               <td><code>search</code></td>
-              <td>The templated resource reference identifies a location-name-searchable resource API. The <code>{searchTerms}</code> template variable is defined as the substitution target for location name terms to search the API with.</td>
+              <td>A place-name search URL template. The <code>{searchTerms}</code> template variable is defined as the substitution target for location name terms to search the API with.</td>
             </tr>
             <tr id="link-rel-suggestions">
               <td><code>suggestions</code></td>
-              <td>The templated resource reference identifies a location-name-searchable resource API that returns "hints", or suggestions, formatted as a GeoJSON FeatureCollection, that MAY exist within the text corpus that is searchable via the API. The <code>{searchTerms}</code> template variable is defined to be the substitution target for location name terms to search the API for suggestion Feature objects. A suggestion object's derived label or name may be substituted for the <a href="#link-rel-search"><code>search</code></a> link's <code>{searchTerms}</code>.  Searching the linked API in this way MAY obtain a more precise matching and geolocated search result.</td>
+              <td>A place-name suggestions URL template that returns suggestions as a GeoJSON FeatureCollection, for placesthat MAY exist within the text corpus that is searchable via the API. The <code>{searchTerms}</code> template variable is defined to be the substitution target for place-name suggestions. A suggestion object's derived label or name may be substituted for the <a href="#link-rel-search"><code>search</code></a> link's <code>{searchTerms}</code>.  Searching the linked API in this way MAY obtain a more precise matching and geolocated search result.</td>
             </tr>
           </tbody>
         </table>
